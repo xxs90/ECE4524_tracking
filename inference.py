@@ -370,14 +370,15 @@ class ParticleFilter(InferenceModule):
         """
         "*** YOUR CODE HERE ***"
         #raiseNotDefined()
-        newParticle = []
+        newParticle = DiscreteDistribution()
         particleList = self.particles
 
         for oldPos in particleList:
-            newPosDist = self.getPositionDistribution(gameState, oldPos).sample()
-            newParticle.append(newPosDist)
+            newPosDist = self.getPositionDistribution(gameState, oldPos)
+            newParticle[oldPos] = newPosDist.sample()
 
         self.particles = newParticle
+
 
     def getBeliefDistribution(self):
         """
@@ -393,7 +394,7 @@ class ParticleFilter(InferenceModule):
         particleList = self.particles
 
         for particle in particleList:
-            self.beliefs[particle] += 1
+            self.beliefs[particle] = self.beliefs[particle] + 1
 
         self.beliefs.normalize()
         return self.beliefs
